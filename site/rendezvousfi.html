@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automotive - Prise de Rendez-vous</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">AAUTOMOTIVE</div>
+        <ul class="nav-links">
+            <li><a href="full.html">Home</a></li>
+            <li><a href="full.html#services">Services</a></li>
+            <li><a href="full.html#products">Products</a></li>
+            <li><a href="full.html#packages">Packages</a></li>
+            <li><a href="rendezvousfi.html">Rendez-vous</a></li>
+            <li><a href="inscriptionfinal.html">Connexion</a></li>
+            <li><a href="full.html#review">Review</a></li>
+        </ul>
+        <div class="auth-buttons" id="auth-buttons">
+            <a href="inscriptionfinal.html" class="btn-login">LOG IN</a>
+        </div>
+        <div class="user-info" id="user-info" style="display: none;">
+            <span id="user-name-display"></span>
+            <button onclick="logout()" class="logout-btn">Déconnexion</button>
+        </div>
+    </nav>
+
+    <!-- Message d'authentification (affiché si non connecté) -->
+    <div id="auth-warning" class="auth-warning" style="display: none;">
+        <div class="warning-content">
+            <h2>⚠️ Authentification Requise</h2>
+            <p>Pour prendre un rendez-vous, vous devez être connecté à votre compte.</p>
+            <p>Cela nous permet de :</p>
+            <ul>
+                <li>✅ Suivre l'historique de vos réparations (ЛР2)</li>
+                <li>✅ Vous envoyer des notifications sur l'avancement</li>
+                <li>✅ Respecter la loi ФЗ-152 sur la protection des données</li>
+            </ul>
+            <div class="warning-buttons">
+                <a href="inscriptionfinal.html" class="btn-primary">Se connecter / S'inscrire</a>
+                <a href="full.html" class="btn-secondary">Retour à l'accueil</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulaire de Rendez-vous (caché si non connecté) -->
+    <main class="appointment-form" id="appointment-form" style="display: none;">
+        <h1>Prise de Rendez-vous</h1>
+        <p>Remplissez ce formulaire pour planifier votre rendez-vous de réparation automobile</p>
+
+        <form id="rdvForm" action="traitement_rdv.php" method="POST" novalidate>
+            <!-- Informations Personnelles (pré-remplies si connecté) -->
+            <fieldset>
+                <legend>Informations Personnelles</legend>
+                
+                <div class="form-group">
+                    <label for="nom">Nom *</label>
+                    <input type="text" id="nom" name="nom" required readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="prenom">Prénom *</label>
+                    <input type="text" id="prenom" name="prenom" required readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="deuxieme_prenom">Deuxième prénom</label>
+                    <input type="text" id="deuxieme_prenom" name="deuxieme_prenom">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail *</label>
+                    <input type="email" id="email" name="email" required readonly 
+                           placeholder="Pour la confirmation de rendez-vous">
+                </div>
+
+                <div class="form-group">
+                    <label for="telephone">Numéro de téléphone *</label>
+                    <input type="tel" id="telephone" name="telephone" required readonly 
+                           pattern="^\+7\d{10}$" 
+                           placeholder="+7XXXXXXXXXX">
+                </div>
+            </fieldset>
+
+            <!-- Informations Véhicule -->
+            <fieldset>
+                <legend>Informations du Véhicule</legend>
+                
+                <div class="form-group">
+                    <label for="annee">Année *</label>
+                    <select id="annee" name="annee" required>
+                        <option value="">Sélectionnez l'année</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                        <option value="2015">2015</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="marque">Marque *</label>
+                    <select id="marque" name="marque" required>
+                        <option value="">Sélectionnez la marque</option>
+                        <option value="Toyota">Toyota</option>
+                        <option value="Ford">Ford</option>
+                        <option value="Volkswagen">Volkswagen</option>
+                        <option value="BMW">BMW</option>
+                        <option value="Mercedes">Mercedes</option>
+                        <option value="Audi">Audi</option>
+                        <option value="Renault">Renault</option>
+                        <option value="Peugeot">Peugeot</option>
+                        <option value="Citroën">Citroën</option>
+                        <option value="Honda">Honda</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="modele">Modèle *</label>
+                    <input type="text" id="modele" name="modele" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="portes">Nombre de portes *</label>
+                    <select id="portes" name="portes" required>
+                        <option value="">Sélectionnez</option>
+                        <option value="2">2 portes</option>
+                        <option value="3">3 portes</option>
+                        <option value="4">4 portes</option>
+                        <option value="5">5 portes</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="vin">Numéro VIN *</label>
+                    <input type="text" id="vin" name="vin" required 
+                           pattern="[A-HJ-NPR-Z0-9]{17}" 
+                           maxlength="17"
+                           placeholder="17 caractères">
+                </div>
+
+                <div class="form-group">
+                    <label for="probleme">Description du problème</label>
+                    <textarea id="probleme" name="probleme" rows="4"></textarea>
+                </div>
+            </fieldset>
+
+            <!-- Services Demandés -->
+            <fieldset>
+                <legend>Services Demandés</legend>
+                
+                <div class="service-section">
+                    <h4>Services de remplacement de vitres automobiles</h4>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" name="services[]" value="pare-brise">
+                            Pare-brise avant
+                        </label>
+                        <label>
+                            <input type="checkbox" name="services[]" value="vitre-arriere">
+                            Vitre arrière
+                        </label>
+                        <label>
+                            <input type="checkbox" name="services[]" value="vitres-laterales">
+                            Vitres latérales
+                        </label>
+                        <label>
+                            <input type="checkbox" name="services[]" value="toit-ouvrant">
+                            Toit ouvrant
+                        </label>
+                        <label>
+                            <input type="checkbox" name="services[]" value="reparation-fissure">
+                            Réparation de fissure
+                        </label>
+                        <label>
+                            <input type="checkbox" name="services[]" value="teinture">
+                            Teinture de vitres
+                        </label>
+                    </div>
+                </div>
+
+                <div class="service-section">
+                    <h4>Services électroniques automobiles</h4>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" name="services[]" value="diagnostic">
+                            Diagnostic électronique
+                        </label>
+                        <label>
+                            <input type="checkbox" name="services[]" value="reprogrammation">
+                            Reprogrammation ECU
+                        </label>
+                        <label>
+                            <input type="checkbox" name="services[]" value="capteurs">
+                            Capteurs et systèmes d'aide
+                        </label>
+                        <label>
+                            <input type="checkbox" name="services[]" value="eclairage">
+                            Systèmes d'éclairage LED
+                        </label>
+                        <label>
+                            <input type="checkbox" name="services[]" value="audio">
+                            Systèmes audio
+                        </label>
+                        <label>
+                            <input type="checkbox" name="services[]" value="securite">
+                            Systèmes de sécurité
+                        </label>
+                    </div>
+                </div>
+
+                <div class="service-image">
+                    <img src="https://images.unsplash.com/photo-1621360003788-87e336570e60?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Réparation de vitre automobile">
+                    <p>Réparation de vitre automobile</p>
+                </div>
+            </fieldset>
+
+            <!-- Date et Heure -->
+            <fieldset>
+                <legend>Quand souhaitez-vous prendre rendez-vous?</legend>
+                
+                <div class="form-group">
+                    <label for="date">Date *</label>
+                    <input type="date" id="date" name="date" required min="">
+                </div>
+
+                <div class="form-group">
+                    <label for="heure">Heure *</label>
+                    <select id="heure" name="heure" required>
+                        <option value="">Sélectionnez l'heure</option>
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <!-- Consentement ФЗ-152 (ОБЯЗАТЕЛЬНО!) -->
+            <div class="consent">
+                <label>
+                    <input type="checkbox" name="consent" required>
+                    J'accepte le traitement de mes données personnelles conformément à la loi fédérale ФЗ-152
+                </label>
+            </div>
+
+            <button type="submit" class="btn-primary">Soumettre le rendez-vous</button>
+        </form>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="about">
+                <h4>À propos</h4>
+                <p>Automotive Car Repair offre des services de réparation automobile de haute qualité depuis plus de 15 ans. Notre plateforme en ligne vous permet de prendre rendez-vous facilement.</p>
+            </div>
+            <div class="quick-links">
+                <h4>Liens rapides</h4>
+                <ul>
+                    <li><a href="full.html">Accueil</a></li>
+                    <li><a href="full.html#services">Services</a></li>
+                    <li><a href="full.html#products">Produits</a></li>
+                    <li><a href="full.html#packages">Forfaits</a></li>
+                    <li><a href="full.html#review">Avis clients</a></li>
+                </ul>
+            </div>
+            <div class="contact">
+                <h4>Contact</h4>
+                <p>Kazan Karl Marks 72</p>
+                <p>+7 xxx xxx xxxx</p>
+                <p>contact@automotive-repair.com</p>
+            </div>
+        </div>
+        <p class="copyright">© 2024 Automotive Car Repair. Tous droits réservés.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
