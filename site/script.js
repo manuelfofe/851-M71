@@ -1,7 +1,3 @@
-// ============================================
-// SCRIPT.JS - Authentification + Validation
-// Conformité ЛР2/ЛР3/ЛР4 + ФЗ-152
-// ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
     
